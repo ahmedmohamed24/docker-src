@@ -1,3 +1,4 @@
 .idea
 mysql
 src/.vscode
+redis

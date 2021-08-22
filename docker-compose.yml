@@ -1,7 +1,11 @@
-version: '3'
+version: "3"
 
 networks:
   laravel:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
 
 services:
   app:
@@ -10,7 +14,7 @@ services:
       dockerfile: nginx.dockerfile
     container_name: nginx
     ports:
-      - "8000:80"
+      - "80:80"
     volumes:
       - ./src:/var/www/html:delegated
     depends_on:
@@ -29,29 +33,15 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: invoice
-      MYSQL_USER: homestead
+      MYSQL_DATABASE: emtehanat
+      MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
       - laravel
-  phpmyadmin:
-    container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
-    restart: always
-    links:
-      - mysql:mysql
-    environment:
-      MYSQL_USER: homestead
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: secret
-      PMA_HOST: mysql
-    ports:
-      - "8080:80"
-    networks:
-      - laravel
+
   php:
     build:
       context: .
@@ -63,14 +53,24 @@ services:
       - "9000:9000"
     networks:
       - laravel
-  
   npm:
-    image: iojs:latest
+    image: iojs:onbuild
     container_name: npm
     volumes:
       - ./src:/var/www/html
+    ports:
+      - 3000:3000
+      - 3001:3001
     working_dir: /var/www/html
-    entrypoint: ['npm']
+    entrypoint: ["npm"]
     networks:
       - laravel
 
+  redis_service:
+    image: redis:alpine
+    volumes:
+      - ./redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
