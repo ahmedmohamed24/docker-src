@@ -33,10 +33,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: emtehanat
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: $CustomeDB
+      MYSQL_USER: $root
+      MYSQL_PASSWORD: $veryStorngPaswory
+      MYSQL_ROOT_PASSWORD: $veryStorngPaswory
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
@@ -51,18 +51,6 @@ services:
       - ./src:/var/www/html:delegated
     ports:
       - "9000:9000"
-    networks:
-      - laravel
-  npm:
-    image: iojs:onbuild
-    container_name: npm
-    volumes:
-      - ./src:/var/www/html
-    ports:
-      - 3000:3000
-      - 3001:3001
-    working_dir: /var/www/html
-    entrypoint: ["npm"]
     networks:
       - laravel
 
