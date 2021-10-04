@@ -5,6 +5,20 @@
 1. change the current directory to project path ex:
 
       ``` cd docker-laravel ```
+1. change your database credentials in *docker-compose.yml* file
+
+    ```
+    environment:
+      MYSQL_DATABASE: shop
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+    ```
+    *docker will create your database with the provided credentials during installation process*
+    ***
 
 1. ``` docker-compose build && docker-compose up -d ```
 
